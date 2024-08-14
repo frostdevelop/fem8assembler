@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>FEMBOY-8 Assembler</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <h1 id="title">Femboy-8 Assembler</h1>
+  <textarea id="Input" placeholder="Input"></textarea>
+  <textarea id="Output" placeholder="Output"></textarea>
+  <button id="Trigger">Assemble</button>
+  <hr>
+  <h2 id="set">Instruction Set</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Opcode</th>
+        <th>Mnemonic</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00</td>
+        <td>NOP</td>
+        <td>No Operation</td>
+      </tr>
+      <tr>
+        <td>01</td>
+        <td>HLT</td>
+        <td>Halts CPU</td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>OUT [id]</td>
+        <td>Outputs out of a Output port.</td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>LDA [d8]</td>
+        <td>Loads 8-bit word into the accumulator</td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>MVA [r]</td>
+        <td>Move register to accumulator</td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>MVR [r]</td>
+        <td>Move accumulator to register</td>
+      </tr>
+      <tr>
+        <td>06</td>
+        <td>INC [r]</td>
+        <td>Increment a register</td>
+      </tr>
+      <tr>
+        <td>07</td>
+        <td>DEC [r]</td>
+        <td>Decrement a register</td>
+      </tr>
+      <tr>
+        <td>08</td>
+        <td>ADD [r]</td>
+        <td>Add the accumulator from a register</td>
+      </tr>
+      <tr>
+        <td>09</td>
+        <td>SUB [r]</td>
+        <td>Subtract the accumulator from a register</td>
+      </tr>
+      <tr>
+        <td>0A</td>
+        <td>AND [r]</td>
+        <td>And the register and accumulator</td>
+      </tr>
+      <tr>
+        <td>0B</td>
+        <td>IOR [r]</td>
+        <td>OR the register and accumulator</td>
+      </tr>
+      <tr>
+        <td>0C</td>
+        <td>XOR [r]</td>
+        <td>XOR the register and accumulator</td>
+      </tr>
+      <tr>
+        <td>0D</td>
+        <td>NOT [r]</td>
+        <td>NOT a register</td>
+      </tr>
+      <tr>
+        <td>0E</td>
+        <td>SAR [d8]</td>
+        <td>Barrel Shift accumulator right</td>
+      </tr>
+      <tr>
+        <td>0F</td>
+        <td>SAL [d8]</td>
+        <td>Barrel Shift accumulator left</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>JUP [d8]</td>
+        <td>Jump to a location</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>JPP [r]</td>
+        <td>Jump to a register value</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>JPL [d8]</td>
+        <td>Jump if accumulator is less than 0</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>JZO [d8]</td>
+        <td>Jump if accumulator is 0</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>JPG [d8]</td>
+        <td>Jump if accumulator is greater than 0</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>JLE [d8]</td>
+        <td>Jump if accumulator is less than or equal to 0</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td>JGE [d8]</td>
+        <td>Jump if accumulator is greater than or equal to 0</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td>JNZ [d8]</td>
+        <td>Jump if accumulator is not 0</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td>CLR [r]</td>
+        <td>Clear a register</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>INP [id]</td>
+        <td>Store INPUT id in accumulator</td>
+      </tr>
+      <tr>
+        <td>1A</td>
+        <td>MPR [r]</td>
+        <td>Move the value at address A register r</td>
+      </tr>
+      <tr>
+        <td>1B</td>
+        <td>MRP [r]</td>
+        <td>Move register r into address A</td>
+      </tr>
+      <tr>
+        <td>1C</td>
+        <td>MPA [d8]</td>
+        <td>Move a value in a pointer to the accummulator</td>
+      </tr>
+      <tr>
+        <td>1D</td>
+        <td>MAP [d8]</td>
+        <td>Move the accumulator to a location</td>
+      </tr>
+      <tr>
+        <td>1E</td>
+        <td>MLT [r]</td>
+        <td>Multiply register r by the accumulator</td>
+      </tr>
+      <tr>
+        <td>1F</td>
+        <td>DIV [r]</td>
+        <td>Divide register r by accumulator</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="register">Registers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Name</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00</td>
+        <td>Register 00</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>01</td>
+        <td>Register 01</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>Register 10</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>Register 11</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>CR Flag</td>
+        <td>R</td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>ZERO Flag</td>
+        <td>R</td>
+      </tr>
+      <tr>
+        <td>06</td>
+        <td>Divider Remainder</td>
+        <td>R</td>
+      </tr>
+      <tr>
+        <td>07</td>
+        <td>Multiplication Overflow</td>
+        <td>R</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="port">Ports</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Name</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00</td>
+        <td>Hex Display</td>
+        <td>Output</td>
+      </tr>
+      <tr>
+        <td>01</td>
+        <td>TTY</td>
+        <td>Output</td>
+      </tr>
+      <tr>
+        <td>00</td>
+        <td>Keyboard</td>
+        <td>Input</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="mm">Memory Map</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Name</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00-F5</td>
+        <td>General Purpose Memory</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>F6</td>
+        <td>RTC (40hz)</td>
+        <td>R<td>
+      </tr>
+      <tr>
+        <td>F7</td>
+        <td>RNG (Write to random)</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>F8</td>
+        <td>PPU SPos</td>
+        <td>R</td>
+      </tr>
+      <tr>
+        <td>F9</td>
+        <td>PPU CLR</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FA</td>
+        <td>PPU BK</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FB</td>
+        <td>PPU FLG</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FC</td>
+        <td>PPU S</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FD</td>
+        <td>PPU P2</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FE</td>
+        <td>PPU P1</td>
+        <td>R/W</td>
+      </tr>
+      <tr>
+        <td>FF</td>
+        <td>PPU OP</td>
+        <td>W</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="pins">PPU Instruction Set</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Mnemonic</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00</td>
+        <td>NOP</td>
+        <td>Raytracing nvidia graphics rtx (JOKE)</td>
+      </tr>
+      <tr>
+        <td>01</td>
+        <td>FLP</td>
+        <td>Invokes a graphics update</td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>DSP</td>
+        <td>Disables the currently selected sprite using S</td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>ESP</td>
+        <td>Enables the currently selected sprite using S</td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>CSP</td>
+        <td>Creates a sprite at slot S with P1, P2, and CLR.</td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>USP</td>
+        <td>Updates the currently selected Sprite with P1 as it's new position</td>
+      </tr>
+      <tr>
+        <td>06</td>
+        <td>USD</td>
+        <td>Updates the currently selected Sprite with P2 as it's new dimension or position</td>
+      </tr>
+      <tr>
+        <td>07</td>
+        <td>USC</td>
+        <td>Updates the currently selected Sprite with CLR as it's new color</td>
+      </tr>
+      <tr>
+        <td>08</td>
+        <td>SCL</td>
+        <td>Updates every sprite by adding P1 to it's position</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="preg">PPU Registers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>OP</td>
+        <td>Operation for the PPU. Excecutes on write.</td>
+        <td>W</td>
+      </tr>
+      <tr>
+        <td>P1</td>
+        <td>Used interchangeably but usually a position (changes based on OP)</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>P2</td>
+        <td>Used interchangeably but usually a dimension (changes based on OP)</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>S</td>
+        <td>Slot register meant for Sprite i/o</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>FLG</td>
+        <td>Flag register to modify the behavior of the PPU</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>BK</td>
+        <td>The background color (RRRGGBBB)</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>CLR</td>
+        <td>This holds the color register for stuff (RRRGGBBB)</td>
+        <td>R/W<td>
+      </tr>
+      <tr>
+        <td>SPOS</td>
+        <td>This holds the current position of the sprite</td>
+        <td>R<td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <h2 id="guide">Assembler Guide</h2>
+  <h3 id="introduction">Introduction</h3>
+  <p>Hello all! I am flattered that you are using my Assembler! Let me introduce myself. Hi, i'm Pacifiky one of the creators of the CPU 
+    <a href="https://circuitverse.org/simulator/femboy-8">Femboy-8</a> and GPU <a href="https://circuitverse.org/simulator/cb-ppu">Color Burst</a>!
+    I created this assembler to make it easier for ya'll to make programs for the f8!
+    <br/>
+    Here's a guide to help get you started.
+  </p>
+  <h3 id="instructions">Instructions 🖇</h3>
+  <p>
+    Instructions are written like this: 
+    <code>JUP 00</code> this jumps to the adress 0.
+    The instruction will always be 3 letters long and the argument can be either a <a href="#">marker</a> or a 8 bit hex value. But after the argument you can put <a href="#comments">comments.</a>
+    <br/>
+    Instructions <code>NOP</code> and <code>HLT</code> do not require any arguments.
+    <br/>
+    Instructions are also separated by newlines.
+    <br/>
+    In order for a full explanation of instructions please consult the <a href="#set">instruction set.</a>
+  </p>
+  <h3 id="inset">Instruction Set 📰</h3>
+  <p>
+    The Instruction Set is organized with OPCODE first (the hexidecimal value of the insturction), Mnemonic second (the Assembly code), then a short explanation of the instruction.
+    <br/>
+    Some instructions have [] next to them. That means they require a argument whether it be 8-bit hexideimal or markers.
+    <br/>
+    The words inside the brakets represent what the argument is.
+    <br/>
+    [id] means a <a href="#port">port</a> id.
+    <br/>
+    [r] means a <a href="#register">register</a>.
+    <br/>
+    [d8] means an 8 bit hexidecimal value.
+  </p>
+  <h3 id="comments">Comments 📝</h3>
+  <p>
+    There are 2 types of comments: instruction and line comments.
+    <br/>
+    Line comments are organized like this:
+    <br/>
+    <code class="block">
+      #This is a comment.
+      <br/>
+      HLT
+    </code>
+    They use # and the assembler completely ignores the line.
+    <br/>
+    Instruction comments are organized like this:
+    <code class="block">
+      HLT ;This is a comment
+    </code>
+    They work on both no argument instructions and argument instructions. The comment is ignored by the assembler.
+  </p>
+  <h3 id="markers">Markers 🔴</h3>
+  <p>
+    Markers are used to mark certain parts of the code in in order to make jumping easier.
+    <br/>
+    As you add code, the marker value automatically updates.
+    <br/>
+    Markers cannot contain spaces and can be placed on any line in the code.
+    <br/>
+    Markers are removed from the code and the values are filled in by the assembler.
+    <br/>
+    Markers can also be used as arguments for any instruction (if you want a location as the argument that is).
+    <br/>
+    Markers are organized like this:
+    <code class="block">
+      beginning:
+      <br/>
+      INP 00
+      <br/>
+      JZO beginning
+      <br/>
+      OUT 01
+      <br/>
+      JUP beginning
+    </code>
+  </p>
+  <h3 id="assembly">Assembly 🖥</h3>
+  <p>
+    The code is entered into the INPUT textarea to the left and output is assembled on the right OUTPUT textarea.
+    <br/>
+    In order to assemble your code press the "assemble" button at the bottom.
+  </p>
+  <h3 id="end">Ending</h3>
+  <p>
+    Welp that's all for this short guide on the Assembler!
+    <br/>
+    Be sure to read the <a href="#set">Instruction set</a>, <a href="#register">Registers</a>, and <a href="#port">Ports</a> section of this page.
+    <br/>
+    Have fun coding!
+  </p>
+  <hr/>
+  <h2 id="cbguide">Color Burst Dev Guide (V3)</h2>
+  <h3 id="cbintro">Introduction 🎉</h3>
+  <p>
+    So... you wanna make some 8k UHD graphics on the Fem-8? Well... look no further! Starting from April 30-May 12 
+    I have created a PPU to serve your graphical needs! I called it <a href="https://circuitverse.org/simulator/cb-ppu">Color Burst</a>!
+    You can find some Q&A and description on the project! I have also listed the <a href="#preg">PPU registers</a> and <a href="#pins">Instruction set</a> above if you didn't notice. Also in order to use this you need the <a href="#mm">Memory Map</a>! But other than that, let's get started.
+  </p>
+  <h3 id="form">Format 📜</h3>
+  <p>
+    So you might be confused. "Pacifiky? How are you supposed to drive a 24-bit screen with 8 bit color, and how are you doing the coordinates?
+    Well... here's what I did.
+    <br/>
+    Color is organized like this:
+    <code class="block">RRRGGBBB</code>
+    So yes... you won't get very precise greens for your graphics, but other than that it's fast and totally used!
+    <br/>
+    Coordinates (and Dimensions) are organized like this:
+    <code class="block">XXXXYYYY</code>
+    This makes it a bit of an inconvenience when performing arithmetic
+    on coordinates. But also, this means that it can only drive screens less than 16x16 (tragic).
+  </p>
+  <h3 id="flg">Flags 🚩</h3>
+  <p>
+    Here's how the FLG register is defined!
+    <code class="block">AECg BGRM</code>
+    M = Pos1, Pos2 OR Pos, Dim
+    <br/>
+    R = Adds 32 to r channel from then on (Tint Red)
+    <br/>
+    G = Adds 32 to g channel from then on (Tint Green)
+    <br/>
+    B = Adds 32 to b channel from then on (Tint Blue)
+    <br/>
+    g = Uses CLR as grayscale value from then on
+    <br/>
+    C = Nothing...?
+    <br/>
+    E = Disable background
+    <br/>
+    A = Graphics update by clock or manual
+    <br/>
+    <br/>
+    M flag:
+    <br/>
+    So basically, the M flag just controls how the coordinates used when creating sprites is interpreted.
+    Setting it to 0 would render the second sprite value as Dimension of the sprite, setting it to 1 would make it the Position of the opposite vertex to value 1 (position).
+    <br/>
+    <br/>
+    RGBg flags:
+    <br/>
+    So these are the fun flags... R tints everything red on graphics update (only the output) G does green and B does blue respectively.
+    But g... basically allows you to use the full 8-bits by turning it into a grayscale value! So at least you can get full quality photos from the 50s! 
+    <br/>
+    <br/>
+    C flag:
+    <br/>
+    ...
+    <br/>
+    <br/>
+    E flag:
+    <br/>
+    So whenever you invoke a graphics update, it erases everything to the color of the BK register!
+    But that's kind of a problem when you want more sprites for something (like snake!). So by disabling
+    the background, you keep everything from the last update and you can add or erase stuff when YOU want.
+    <br/>
+    <br/>
+    A flag:
+    <br/>
+    So usually, grahpics updates are controlled by the flip instuction in the <a href="#pins">Instruction set</a> but of course if you want,
+    you can control it with the same RTC clock as used in the <a href="#mm">Memory Map</a> which means you get a stable 40fps. 
+  </p>
+  <h3 id="spr">Sprites 😼</h3>
+  <p>
+    Wait a moment... is this scratch??? No it isn't but there is sprites!
+    Each sprite is defined with 3 variables. An arbitrary position, dimension (or position by M), and color!
+    So sadly, no you cannnot make a picture of your Minecraft skin into a spite (sad).
+    Oh and also, you can only read a single property of the currently selected sprite. You can find that
+    in SPos! It's just the position of the sprite and if you want to save others, you're gonna have to save that to
+    memory sadly. But i'm planning on implementing instructions to swap the currently selected dim and color with the current registers.
+  </p>
+  <h3 id="tim">Timing ⏰</h3>
+  <p>
+    So with the fem8 you probably won't have any problems with timing on the PPU. It takes 32 units of time for both graphics updates and scrolling. 
+    To put it in perspective, the fem8 uses 50 units for it's clock cycle.
+  </p>
+  <h3 id="bk">Background 🧱</h3>
+  <p>
+    So every time you invoke a graphics update, everything is erased to the color in the BK register. This can be disabled by E in the <a href="#flg">flag section</a>!
+  </p>
+  <h3 id="pend">Ending</h3>
+  <p>
+    So... this is everything you need to know to use the graphics system! Now that you know everything about programming this computer I have a challenge for you:
+    <br/>
+    Will it run DOOM?
+  </p>
+  <hr/>
+  <footer>
+    Femboy-8 is an 8-bit CPU made by Kain and Pacifiky using CircuitVerse.<br/>Femboy-8 Assembler was programmed by Pacifiky using Javascript.
+    <br/>
+    Site created March 4, 2024
+    <br/>
+    Site updated May 16, 2024
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
