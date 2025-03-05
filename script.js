@@ -67,3 +67,7 @@ function hexify(s){
 document.getElementById("Trigger").addEventListener("click", ()=>{
   document.getElementById("Output").value = process(document.getElementById("Input").value);
 });
+
+window.onbeforeunload = ()=>{
+  if(document.getElementById("Input").value != ""){return 'Are you sure you have saved your work?';}else{return;}
+}
