@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width">
   <title>FEMBOY-8 Assembler</title>
 
-<style id="jsbin-css">
+<style>
 html {
   padding: 0;
   margin: 0;
@@ -60,7 +59,7 @@ footer {
   margin: 50px 0px;
   padding: 5px 10px;
 }
-p {
+p,ul,ol {
   padding: 0px 15vw;
   font-size: 18px;
   line-height: 25px;
@@ -546,14 +545,18 @@ a:hover {
   <h3 id="instructions">Instructions 🖇</h3>
   <p>
     Instructions are written like this: 
-    <code>JUP 00</code> this jumps to the adress 0.
-    The instruction will always be 3 letters long and the argument can be either a <a href="https://output.jsbin.com/wutikij/31#">marker</a> or a 8 bit hex value. But after the argument you can put <a href="https://output.jsbin.com/wutikij/31#comments">comments.</a>
+    <code>JUP 00</code> this jumps to the address 0.
+    Instructions are always 3 characters long and not case sensitive.
+    <br/>
+    But after the argument you can put <a href="#comments">comments.</a>
+    <br/>
+    Arguments must be <a href='#values'>Values</a>
     <br>
     Instructions <code>NOP</code> and <code>HLT</code> do not require any arguments.
     <br>
     Instructions are also separated by newlines.
     <br>
-    In order for a full explanation of instructions please consult the <a href="https://output.jsbin.com/wutikij/31#set">instruction set.</a>
+    In order for a full explanation of instructions please consult the <a href="#set">instruction set.</a>
   </p>
   <h3 id="inset">Instruction Set 📰</h3>
   <p>
@@ -563,11 +566,11 @@ a:hover {
     <br>
     The words inside the brakets represent what the argument is.
     <br>
-    [id] means a <a href="https://output.jsbin.com/wutikij/31#port">port</a> id.
+    [id] means a <a href="#port">port</a> id.
     <br>
-    [r] means a <a href="https://output.jsbin.com/wutikij/31#register">register</a>.
+    [r] means a <a href="#register">register</a>.
     <br>
-    [d8] means an 8 bit hexidecimal value.
+    [d8] means an 8 bit value.
   </p>
   <h3 id="comments">Comments 📝</h3>
   <p>
@@ -594,36 +597,79 @@ a:hover {
     <br>
     As you add code, the marker value automatically updates.
     <br>
-    Markers cannot contain spaces and can be placed on any line in the code.
+    Markers can be placed on any line in the code.
     <br>
     Markers are removed from the code and the values are filled in by the assembler.
     <br>
     Markers can also be used as arguments for any instruction (if you want a location as the argument that is).
     <br>
+    Markers must be atleast 3 characters, contain no quotes or space, and can't be a instruction.
+    <br/>
     Markers are organized like this:
     <code class="block">
       beginning:
       <br>
-      INP 00
+      INP 0
       <br>
       JZO beginning
       <br>
-      OUT 01
+      OUT 1
       <br>
       JUP beginning
     </code>
   </p>
-  <h3 id="assembly">Assembly 🖥</h3>
+  <h3 id="defs">Definitions 🔲</h3>
   <p>
-    The code is entered into the INPUT textarea to the left and output is assembled on the right OUTPUT textarea.
-    <br>
-    In order to assemble your code press the "assemble" button at the bottom.
+    Definitions are basically like #DEFINE in cpp.
+    <br/>
+    They allow you to reuse values throughout the code.
+    <br/>
+    Like markers, definitions must be atleast 3 characters, contain no quotes or spaces, and can't be a instruction.
+    <br/>
+    Unlike #DEFINE, definitions must be <a href='#values'>Values</a> for instruction arguments.
+    <br/>
+    Definitions are organized like this:
+    <code class="block">
+      PLAYER = 'o'
+      <br/>
+      game:
+      <br/>
+      inp 0
+      <br/>
+      jzo game
+      <br/>
+      lda PLAYER
+      <br/>
+      out 1
+      <br/>
+      jup game
+    </code>
   </p>
+  <h3 id="values">Values 🔢</h3>
+  <p>
+    Values can be either of these:
+  </p>
+  <ul>
+    <li><a href="#markers">Marker</a></li>
+    <li><a href="#defs">Definition</a></li>
+    <li>8-bit hex value (f,FF)</li>
+    <li>Character ('a',"z")</li>
+    <li>8-bit octal value (0o20,0o377)</li>
+    <li>8-bit int value (0i10,0i255)</li>
+  </ul>
+  <p>
+    In error messages, you will also find a few types of values:
+  </p>
+  <ul>
+    <li>HValue: Hexidecimal values</li>
+    <li>NValue: Numeric values (Octal, Integer, or Binary)</a></li>
+    <li>SValue: Small hex values (F,A)</li>
+  </ul>
   <h3 id="end">Ending</h3>
   <p>
     Welp that's all for this short guide on the Assembler!
     <br>
-    Be sure to read the <a href="https://output.jsbin.com/wutikij/31#set">Instruction set</a>, <a href="https://output.jsbin.com/wutikij/31#register">Registers</a>, and <a href="https://output.jsbin.com/wutikij/31#port">Ports</a> section of this page.
+    Be sure to read the <a href="#set">Instruction set</a>, <a href="#register">Registers</a>, and <a href="#port">Ports</a> section of this page.
     <br>
     Have fun coding!
   </p>
@@ -631,9 +677,9 @@ a:hover {
   <h2 id="cbguide">Color Burst Dev Guide (V3)</h2>
   <h3 id="cbintro">Introduction 🎉</h3>
   <p>
-    So... you wanna make some 8k UHD graphics on the Fem-8? Well... look no further! Starting from April 30-May 12 
+    So... you wanna make some 8k UHD graphics on the Fem-8? Well... look no further! Starting from April 30-May 12 (2024)
     I have created a PPU to serve your graphical needs! I called it <a href="https://circuitverse.org/simulator/cb-ppu">Color Burst</a>!
-    You can find some Q&amp;A and description on the project! I have also listed the <a href="https://output.jsbin.com/wutikij/31#preg">PPU registers</a> and <a href="https://output.jsbin.com/wutikij/31#pins">Instruction set</a> above if you didn't notice. Also in order to use this you need the <a href="https://output.jsbin.com/wutikij/31#mm">Memory Map</a>! But other than that, let's get started.
+    You can find some Q&amp;A and description on the project! I have also listed the <a href="#preg">PPU registers</a> and <a href="#pins">Instruction set</a> above if you didn't notice. Also in order to use this you need the <a href="#mm">Memory Map</a>! But other than that, let's get started.
   </p>
   <h3 id="form">Format 📜</h3>
   <p>
@@ -696,8 +742,8 @@ a:hover {
     <br>
     A flag:
     <br>
-    So usually, grahpics updates are controlled by the flip instuction in the <a href="https://output.jsbin.com/wutikij/31#pins">Instruction set</a> but of course if you want,
-    you can control it with the same RTC clock as used in the <a href="https://output.jsbin.com/wutikij/31#mm">Memory Map</a> which means you get a stable 40fps. 
+    So usually, grahpics updates are controlled by the flip instuction in the <a href="#pins">Instruction set</a> but of course if you want,
+    you can control it with the same RTC clock as used in the <a href="#mm">Memory Map</a> which means you get a stable 40fps. 
   </p>
   <h3 id="spr">Sprites 😼</h3>
   <p>
@@ -715,7 +761,7 @@ a:hover {
   </p>
   <h3 id="bk">Background 🧱</h3>
   <p>
-    So every time you invoke a graphics update, everything is erased to the color in the BK register. This can be disabled by E in the <a href="https://output.jsbin.com/wutikij/31#flg">flag section</a>!
+    So every time you invoke a graphics update, everything is erased to the color in the BK register. This can be disabled by E in the <a href="#flg">flag section</a>!
   </p>
   <h3 id="pend">Ending</h3>
   <p>
@@ -725,77 +771,202 @@ a:hover {
   </p>
   <hr>
   <footer>
+    You are running version 1.1
+    <br/>
+    <br/>
     Femboy-8 is an 8-bit CPU made by Kain and Pacifiky using CircuitVerse.<br>Femboy-8 Assembler was programmed by Pacifiky using Javascript.
-    <br>
-    Site created March 4, 2024
-    <br>
-    Site updated May 16, 2024
+    <br/>
+    <br/>
+    Site created March 4, 2024 | Site updated March 31, 2025
+    <br/>
+    <br/>
+    Copyright Frost 2025
+    <br/>
+    Licensed under CC-BY-NC-SA 4.0 INTERNATIONAL
   </footer>
-<script async="" src="./FEMBOY-8 Assembler_files/analytics.js.download"></script><script>
+<script>
 const index = {"NOP":"00", "HLT":"01", "OUT":"02", "LDA":"03", "MVA":"04", "MVR":"05", "INC":"06", "DEC":"07", "ADD":"08", "SUB":"09", "AND":"0A", "IOR":"0B", "XOR":"0C", "NOT":"0D", "SAR":"0E", "SAL":"0F", "JUP":"10", "JPP":"11", "JPL":"12", "JZO":"13", "JPG":"14", "JLE":"15", "JGE":"16", "JNZ":"17", "CLR":"18", "INP":"19", "MPR":"1A", "MRP":"1B", "MPA":"1C", "MAP":"1D", "MLT":"1E", "DIV":"1F"}
+const namrgx = /^[^'"]{3,}$/; // /^[0-9a-zA-Z_]{3,}$/
 function process(inp){
   let to = inp.split("\n");
   let t = to;
   let num = 0;
   let out = "";
+  let errlog = "";
   for(let i = 0; i < t.length; i++){
-    if(t[i][0] == "#"){
+    if(t[i].length == 0 || t[i][0] == "#"){
       t.splice(i,1);
       i--
       continue
     }
     let ins = t[i].split(" ");
     if(ins.length == 1 && ins[0].charAt(ins[0].length-1)==":"){
+      const replace = ins[0].substr(0,ins[0].length-1);
+      if(!namrgx.test(replace)){
+        errlog += 'NameError: Marker '+replace+' is too short or has a quote in it.\nLine: '+(i+1).toString()+'\n';
+      }else if(index[replace.toUpperCase()] != undefined){
+        errlog += 'NameError: Marker '+replace+' is a reserved name.\nLine: '+(i+1).toString()+'\n';
+      }
       let loc = ((i*2)-num).toString(16).toUpperCase();
       if(loc.length == 1){
         loc = "0"+loc;
       }
       t.splice(i,1);
       i--
-      let replace = ins[0].substr(0,ins[0].length-1);
       for(let j=0;j<t.length;j++){
-        if(t[j].split(" ")[1] == replace){
-          t[j] = t[j].replace(replace, loc)
+        const spins = t[j].split(" ");
+        if(spins[1] == replace){
+        	spins[1] = loc;
+        	t[j] = spins.join(' ');
         }
       }
+      continue;
+    }else if(ins.length == 3 && ins[1] == '='){
+        if(!namrgx.test(ins[0])){
+          errlog += 'NameError: Definition '+ins[0]+' is too short or has a quote in it.\nLine: '+(i+1).toString()+'\n';
+        }else if(index[ins[0].toUpperCase()] != undefined){
+          errlog += 'NameError: Definition '+ins[0]+' is a reserved name.\nLine: '+(i+1).toString()+'\n';
+        }
+    	const hval = toHex(ins[2]);
+    	if(Number.isInteger(hval)){
+          let err = 'CosmicError: Ask dev to debug\n';
+          switch(hval){
+            case 0:
+              err = 'ValueError: Definition ' + ins[0] + '\'s Value(S) '+ins[2]+' is not an 8-bit Value or Character\nLine: '+(i+1).toString()+'\n';
+              break;
+            case 1:
+              err = "ValueError: Definition " + ins[0] + "'s Value(N) " + ins[2] + " is not a 8-bit Value or Character\nLine: "+(i+1).toString()+'\n';
+              break;
+            case 2:
+              err = "ValueError: Definition " + ins[0] + "'s Value(N) " + ins[2] + " is Not a Number!\nLine: "+(i+1).toString()+'\n';
+              break;
+            case 3:
+              err = "OverflowError: Definition " + ins[0] + "'s Value(N) " + ins[2] + " is too Big!\nLine: "+(i+1).toString()+'\n';
+              break;
+            case 4:
+              err = "ValueError: Definition " + ins[0] + "'s Value(H) " + ins[2] + " is not a 8-bit Value or Character\nLine: "+(i+1).toString()+'\n';
+          }
+          errlog += err;
+          //alert(err);
+          //return err;
+          continue;
+        }
+      	t.splice(i,1);
+      	for(let j=0;j<t.length;j++){
+        	const spins = t[j].split(" ");
+        	if(spins[1] == ins[0]){
+        		spins[1] = hval;
+          		t[j] = spins.join(' ');
+        	}
+      	}
+    	i--;
+    	continue;
     }
   }
-  console.log(t)
+  //console.log(t)
+  if(t.length > 128){
+  	return errlog+'OverflowError: Instructions overflow to a size of '+(t.length*2).toString()+'\n';
+  	//alert(error);
+  	//return error;
+  }
+  
+  if(errlog){
+    return errlog;
+  }
+  
   for(let i = 0; i < t.length; i++){
     let ins = t[i].split(" ");
     let hex = "";
     if(ins.length > 2 && !((ins[2][0] == ";") || ins[1][0] == ";")){
-      let error = "SyntaxError: More than one argument at line "+(i+1);
-      alert(error);
-      return error;
+      errlog += "SyntaxError: More than one argument\nLine: "+(i+1).toString()+'\n';
+      continue;
     }
-    if(ins.length == 0){
-      let error = "SyntaxError: Less than one argument at line "+(i+1);
-      alert(error);
-      return error;
-    }
-    let insh = index[ins[0]];
+    let insh = index[ins[0].toUpperCase()];
     if(insh == "00" || insh == "01"){
       hex += hexify(insh)+"0x00,";
     } else if(insh == undefined){
-      let error = "SyntaxError: Unknown Command: "+ins[0]+" at line "+(i+1);
-      alert(error);
-      return error;
+      errlog += "SyntaxError: Unknown Command: "+ins[0]+"\nLine: "+(i+1).toString()+'\n';
+      continue;
     } else {
-      if(!(/^[0-9A-F]{2}$/i.test(ins[1]))){
-        let error = "ValueError: Argument " + ins[1] + " is not a 8-bit Hex Value at line " + (i+1);
-        alert(error);
-        return error;
+      const hval = toHex(ins[1]);
+      /*
+      if(hval.length > 2){
+        const err = hval+'\nLine: '+(i+1);
+        alert(err);
+        return err;
       }
-      hex += hexify(insh)+hexify(ins[1]);
+      */
+      if(Number.isInteger(hval)){
+        let err = 'CosmicError: Ask dev to debug';
+        switch(hval){
+          case 0:
+            err = 'ValueError: Argument(S) '+ins[1]+' is not an 8-bit Value or Character\nLine: '+(i+1).toString()+'\n';
+            break;
+          case 1:
+            err = "ValueError: Argument(N) " + ins[1] + " is not a 8-bit Value or Character\nLine: "+(i+1).toString()+'\n';
+            break;
+          case 2:
+            err = "ValueError: Argument(N) " + ins[1] + " is Not a Number!\nLine: "+(i+1).toString()+'\n';
+            break;
+          case 3:
+            err = "OverflowError: Argument(N) " + ins[1] + " is too Big!\nLine: "+(i+1).toString()+'\n';
+            break;
+          case 4:
+            err = "ValueError: Argument(H) " + ins[1] + " is not a 8-bit Value or Character\nLine: "+(i+1).toString()+'\n';
+        }
+        errlog += err;
+        //alert(err);
+        //return err;
+        continue;
+      }
+      hex += hexify(insh)+hexify(hval);
     }
     out += hex;
   }
-  return out.substr(0, out.length-1);
+  return errlog ? errlog : out.substr(0, out.length-1);
 }
 
 function hexify(s){
   return "0x"+s+",";
+}
+
+function toHex(ival){
+  if(ival.length == 3  && ival[0] == ival[2] && (ival[0] == '"' || ival[0] == "'")){
+  	ival = ival[1].charCodeAt(0).toString(16).padStart(2,'0');
+  }else if(ival.length == 1){
+    if(/[0-9A-Fa-f]/.test(ival)){
+      ival = '0'+ival;
+    }else{
+      return 0; //'ValueError: Argument '+ival+' is not an 8-bit Value or Character'
+    }
+  }else{
+    if(ival.length > 3){
+      let val = NaN;
+      switch(ival.substr(0,2)){
+        case '0b':
+          val = parseInt(ival.substr(2),2);
+          break;
+        case '0o':
+          val = parseInt(ival.substr(2),8);
+          break;
+        case '0i':
+          val = parseInt(ival.substr(2));
+          break;
+        default:
+          return 1; //"ValueError: Argument " + ival + " is not a 8-bit Value or Character"
+          break;
+      }
+      if(Number.isNaN(val)){
+        return 2; //"ValueError: Argument " + ival + " is Not a Number!"
+      }else if(val > 255){
+        return 3; //"OverflowError: Argument " + ival + " is too Big!"
+      }
+      ival = val.toString('16').padStart(2,'0');
+    }else if(!(/^[0-9A-Fa-f]{2}$/i.test(ival))){
+      return 4; //"ValueError: Argument " + ival + " is not a 8-bit Value or Character"
+    }
+  }
+  return ival.toUpperCase();
 }
 
 document.getElementById("Trigger").addEventListener("click", ()=>{
