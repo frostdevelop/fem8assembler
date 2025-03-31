@@ -300,8 +300,8 @@
       <tr>
         <td>F6</td>
         <td>RTC (40hz)</td>
-        <td>R<td>
-      </tr>
+        <td>R</td><td>
+      </td></tr>
       <tr>
         <td>F7</td>
         <td>RNG (Write to random)</td>
@@ -424,38 +424,38 @@
       <tr>
         <td>P1</td>
         <td>Used interchangeably but usually a position (changes based on OP)</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>P2</td>
         <td>Used interchangeably but usually a dimension (changes based on OP)</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>S</td>
         <td>Slot register meant for Sprite i/o</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>FLG</td>
         <td>Flag register to modify the behavior of the PPU</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>BK</td>
         <td>The background color (RRRGGBBB)</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>CLR</td>
         <td>This holds the color register for stuff (RRRGGBBB)</td>
-        <td>R/W<td>
-      </tr>
+        <td>R/W</td><td>
+      </td></tr>
       <tr>
         <td>SPOS</td>
         <td>This holds the current position of the sprite</td>
-        <td>R<td>
-      </tr>
+        <td>R</td><td>
+      </td></tr>
     </tbody>
   </table>
   <hr>
@@ -464,48 +464,52 @@
   <p>Hello all! I am flattered that you are using my Assembler! Let me introduce myself. Hi, i'm Pacifiky one of the creators of the CPU 
     <a href="https://circuitverse.org/simulator/femboy-8">Femboy-8</a> and GPU <a href="https://circuitverse.org/simulator/cb-ppu">Color Burst</a>!
     I created this assembler to make it easier for ya'll to make programs for the f8!
-    <br/>
+    <br>
     Here's a guide to help get you started.
   </p>
   <h3 id="instructions">Instructions 🖇</h3>
   <p>
     Instructions are written like this: 
-    <code>JUP 00</code> this jumps to the adress 0.
-    The instruction will always be 3 letters long and the argument can be either a <a href="#">marker</a> or a 8 bit hex value. But after the argument you can put <a href="#comments">comments.</a>
+    <code>JUP 00</code> this jumps to the address 0.
+    Instructions are always 3 characters long and not case sensitive.
     <br/>
+    But after the argument you can put <a href="#comments">comments.</a>
+    <br/>
+    Arguments must be <a href='#values'>Values</a>
+    <br>
     Instructions <code>NOP</code> and <code>HLT</code> do not require any arguments.
-    <br/>
+    <br>
     Instructions are also separated by newlines.
-    <br/>
+    <br>
     In order for a full explanation of instructions please consult the <a href="#set">instruction set.</a>
   </p>
   <h3 id="inset">Instruction Set 📰</h3>
   <p>
     The Instruction Set is organized with OPCODE first (the hexidecimal value of the insturction), Mnemonic second (the Assembly code), then a short explanation of the instruction.
-    <br/>
+    <br>
     Some instructions have [] next to them. That means they require a argument whether it be 8-bit hexideimal or markers.
-    <br/>
+    <br>
     The words inside the brakets represent what the argument is.
-    <br/>
+    <br>
     [id] means a <a href="#port">port</a> id.
-    <br/>
+    <br>
     [r] means a <a href="#register">register</a>.
-    <br/>
-    [d8] means an 8 bit hexidecimal value.
+    <br>
+    [d8] means an 8 bit value.
   </p>
   <h3 id="comments">Comments 📝</h3>
   <p>
     There are 2 types of comments: instruction and line comments.
-    <br/>
+    <br>
     Line comments are organized like this:
-    <br/>
+    <br>
     <code class="block">
       #This is a comment.
-      <br/>
+      <br>
       HLT
     </code>
     They use # and the assembler completely ignores the line.
-    <br/>
+    <br>
     Instruction comments are organized like this:
     <code class="block">
       HLT ;This is a comment
@@ -515,59 +519,102 @@
   <h3 id="markers">Markers 🔴</h3>
   <p>
     Markers are used to mark certain parts of the code in in order to make jumping easier.
-    <br/>
+    <br>
     As you add code, the marker value automatically updates.
-    <br/>
-    Markers cannot contain spaces and can be placed on any line in the code.
-    <br/>
+    <br>
+    Markers can be placed on any line in the code.
+    <br>
     Markers are removed from the code and the values are filled in by the assembler.
-    <br/>
+    <br>
     Markers can also be used as arguments for any instruction (if you want a location as the argument that is).
+    <br>
+    Markers must be atleast 3 characters, contain no quotes or space, and can't be a instruction.
     <br/>
     Markers are organized like this:
     <code class="block">
       beginning:
-      <br/>
-      INP 00
-      <br/>
+      <br>
+      INP 0
+      <br>
       JZO beginning
-      <br/>
-      OUT 01
-      <br/>
+      <br>
+      OUT 1
+      <br>
       JUP beginning
     </code>
   </p>
-  <h3 id="assembly">Assembly 🖥</h3>
+  <h3 id="defs">Definitions 🔲</h3>
   <p>
-    The code is entered into the INPUT textarea to the left and output is assembled on the right OUTPUT textarea.
+    Definitions are basically like #DEFINE in cpp.
     <br/>
-    In order to assemble your code press the "assemble" button at the bottom.
+    They allow you to reuse values throughout the code.
+    <br/>
+    Like markers, definitions must be atleast 3 characters, contain no quotes or spaces, and can't be a instruction.
+    <br/>
+    Unlike #DEFINE, definitions must be <a href='#values'>Values</a> for instruction arguments.
+    <br/>
+    Definitions are organized like this:
+    <code class="block">
+      PLAYER = 'o'
+      <br/>
+      game:
+      <br/>
+      inp 0
+      <br/>
+      jzo game
+      <br/>
+      lda PLAYER
+      <br/>
+      out 1
+      <br/>
+      jup game
+    </code>
   </p>
+  <h3 id="values">Values 🔢</h3>
+  <p>
+    Values can be either of these:
+  </p>
+  <ul>
+    <li><a href="#markers">Marker</a></li>
+    <li><a href="#defs">Definition</a></li>
+    <li>8-bit hex value (f,FF)</li>
+    <li>Character ('a',"z")</li>
+    <li>8-bit octal value (0o20,0o377)</li>
+    <li>8-bit int value (0i10,0i255)</li>
+  </ul>
+  <p>
+    In error messages, you will also find a few types of values:
+  </p>
+  <ul>
+    <li>HValue: Hexidecimal values</li>
+    <li>NValue: Numeric values (Octal, Integer, or Binary)</a></li>
+    <li>SValue: Small hex values (F,A)</li>
+  </ul>
   <h3 id="end">Ending</h3>
   <p>
     Welp that's all for this short guide on the Assembler!
-    <br/>
+    <br>
     Be sure to read the <a href="#set">Instruction set</a>, <a href="#register">Registers</a>, and <a href="#port">Ports</a> section of this page.
-    <br/>
+    <br>
     Have fun coding!
   </p>
-  <hr/>
+  <hr>
   <h2 id="cbguide">Color Burst Dev Guide (V3)</h2>
   <h3 id="cbintro">Introduction 🎉</h3>
   <p>
-    So... you wanna make some 8k UHD graphics on the Fem-8? Well... look no further! Starting from April 30-May 12 
+    So... you wanna make some 8k UHD graphics on the Fem-8? Well... look no further! Starting from April 30-May 12 (2024)
     I have created a PPU to serve your graphical needs! I called it <a href="https://circuitverse.org/simulator/cb-ppu">Color Burst</a>!
-    You can find some Q&A and description on the project! I have also listed the <a href="#preg">PPU registers</a> and <a href="#pins">Instruction set</a> above if you didn't notice. Also in order to use this you need the <a href="#mm">Memory Map</a>! But other than that, let's get started.
+    You can find some Q&amp;A and description on the project! I have also listed the <a href="#preg">PPU registers</a> and <a href="#pins">Instruction set</a> above if you didn't notice. Also in order to use this you need the <a href="#mm">Memory Map</a>! But other than that, let's get started.
   </p>
   <h3 id="form">Format 📜</h3>
   <p>
     So you might be confused. "Pacifiky? How are you supposed to drive a 24-bit screen with 8 bit color, and how are you doing the coordinates?
     Well... here's what I did.
-    <br/>
+    <br>
     Color is organized like this:
     <code class="block">RRRGGBBB</code>
     So yes... you won't get very precise greens for your graphics, but other than that it's fast and totally used!
-    <br/>
+    <br>
     Coordinates (and Dimensions) are organized like this:
     <code class="block">XXXXYYYY</code>
     This makes it a bit of an inconvenience when performing arithmetic
@@ -578,48 +625,48 @@
     Here's how the FLG register is defined!
     <code class="block">AECg BGRM</code>
     M = Pos1, Pos2 OR Pos, Dim
-    <br/>
+    <br>
     R = Adds 32 to r channel from then on (Tint Red)
-    <br/>
+    <br>
     G = Adds 32 to g channel from then on (Tint Green)
-    <br/>
+    <br>
     B = Adds 32 to b channel from then on (Tint Blue)
-    <br/>
+    <br>
     g = Uses CLR as grayscale value from then on
-    <br/>
+    <br>
     C = Nothing...?
-    <br/>
+    <br>
     E = Disable background
-    <br/>
+    <br>
     A = Graphics update by clock or manual
-    <br/>
-    <br/>
+    <br>
+    <br>
     M flag:
-    <br/>
+    <br>
     So basically, the M flag just controls how the coordinates used when creating sprites is interpreted.
     Setting it to 0 would render the second sprite value as Dimension of the sprite, setting it to 1 would make it the Position of the opposite vertex to value 1 (position).
-    <br/>
-    <br/>
+    <br>
+    <br>
     RGBg flags:
-    <br/>
+    <br>
     So these are the fun flags... R tints everything red on graphics update (only the output) G does green and B does blue respectively.
     But g... basically allows you to use the full 8-bits by turning it into a grayscale value! So at least you can get full quality photos from the 50s! 
-    <br/>
-    <br/>
+    <br>
+    <br>
     C flag:
-    <br/>
+    <br>
     ...
-    <br/>
-    <br/>
+    <br>
+    <br>
     E flag:
-    <br/>
+    <br>
     So whenever you invoke a graphics update, it erases everything to the color of the BK register!
     But that's kind of a problem when you want more sprites for something (like snake!). So by disabling
     the background, you keep everything from the last update and you can add or erase stuff when YOU want.
-    <br/>
-    <br/>
+    <br>
+    <br>
     A flag:
-    <br/>
+    <br>
     So usually, grahpics updates are controlled by the flip instuction in the <a href="#pins">Instruction set</a> but of course if you want,
     you can control it with the same RTC clock as used in the <a href="#mm">Memory Map</a> which means you get a stable 40fps. 
   </p>
@@ -644,16 +691,23 @@
   <h3 id="pend">Ending</h3>
   <p>
     So... this is everything you need to know to use the graphics system! Now that you know everything about programming this computer I have a challenge for you:
-    <br/>
+    <br>
     Will it run DOOM?
   </p>
-  <hr/>
+  <hr>
   <footer>
-    Femboy-8 is an 8-bit CPU made by Kain and Pacifiky using CircuitVerse.<br/>Femboy-8 Assembler was programmed by Pacifiky using Javascript.
+    You are running version 1.1
     <br/>
-    Site created March 4, 2024
     <br/>
-    Site updated May 16, 2024
+    Femboy-8 is an 8-bit CPU made by Kain and Pacifiky using CircuitVerse.<br>Femboy-8 Assembler was programmed by Pacifiky using Javascript.
+    <br/>
+    <br/>
+    Site created March 4, 2024 | Site updated March 31, 2025
+    <br/>
+    <br/>
+    Copyright Frost 2025
+    <br/>
+    Licensed under CC-BY-NC-SA 4.0 INTERNATIONAL
   </footer>
   <script src="script.js"></script>
 </body>
