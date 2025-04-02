@@ -794,6 +794,7 @@ function process(inp){
   let out = "";
   let errlog = "";
   for(let i = 0; i < t.length; i++){
+    t[i] = t[i].trim();
     if(t[i].length == 0 || t[i][0] == "#"){
       t.splice(i,1);
       i--
